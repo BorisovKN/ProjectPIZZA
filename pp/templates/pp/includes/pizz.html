@@ -1,0 +1,33 @@
+{% load image_filters %}
+{% load static %}
+
+
+{% for pizza in objects %}
+    <div class="col mb-4">
+        <div class="card card_hover text-white bg-dark">
+            {% if pizza.image|is_exists %}
+                <a href="{{ pizza.get_absolute_url }}">
+                    <img src="{{ pizza.image.read|make_src }}" class="card-img-top main-content">
+                </a>
+            {% else %}
+                <a href="{{ pizza.get_absolute_url }}">
+                    <img src="{% static 'pp/image/not_found.png' %}" class="card-img-top main-content">
+                </a>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title" align="center">{{ pizza.title|truncatechars:20 }}</h5>
+                {% if user.is_authenticated %}
+                    <form action="{% url 'cart:add_to_cart' pizza.id %}" method="post">
+                        {% csrf_token %}
+                        <input name="price" type="submit" class="add_btn btn btn-outline-success" value="{{ pizza.price }}$">
+                    </form>
+                {% else %}
+                    <input type="submit" class="add_btn btn btn-outline-success" value="{{ pizza.price }}$">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+
+

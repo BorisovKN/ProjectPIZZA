@@ -1,0 +1,31 @@
+{% extends 'pp/base.html' %}
+
+{% load image_filters %}
+{% load static %}
+
+{% block title %}
+    Pizza - {{ block.super }}
+{% endblock %}
+
+{% block body %}
+    <div class="card text-white bg-dark body1 noHover">
+        {% if pizza.image|is_exists %}
+            <img src="{{ pizza.image.read|make_src }}" class="card-img-top">
+        {% else %}
+            <img src="{% static 'pp/image/not_found.png' %}" class="card-img-top">
+        {% endif %}
+        <div class="col mb-4">
+            <h4 class="card-title" align="center">{{ pizza.title }}</h4>
+            {% if user.is_authenticated %}
+                <form action="{% url 'cart:add_to_cart' pizza.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" class="add_btn btn btn-outline-success" value="{{ pizza.price }}$">
+                </form>
+            {% else %}
+                    <input type="submit" class="add_btn btn btn-outline-success" value="{{ pizza.price }}$">
+            {% endif %}
+            <h5 class="card-title" align="left" style="margin-top: 10px;">Описание:</h5>
+            <p class="card-text">{{ pizza.body }}</p>
+        </div>
+    </div>
+{% endblock %}

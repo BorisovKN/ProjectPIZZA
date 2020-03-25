@@ -1,0 +1,23 @@
+{% extends 'pp/base.html' %}
+
+{% block title %}
+    Create Pizza - {{ block.super }}
+{% endblock %}
+
+{% block body %}
+    <form method="post" enctype="multipart/form-data" style="width: 30%;">
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label }}:
+                {{ field }}
+            </div>
+        {% endfor %}
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-danger" style="margin-top: 20px" align="center">
+                wrong price
+            </div>
+        {% endif %}
+        <button type="submit" class="btn btn-success">Create</button>
+    </form>
+{% endblock %}

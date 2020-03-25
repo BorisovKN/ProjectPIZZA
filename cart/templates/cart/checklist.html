@@ -1,0 +1,21 @@
+{% extends 'pp/base.html' %}
+{% load static %}
+
+{% block title %}
+    Check - {{ block.super }}
+{% endblock %}
+
+{% block body %}
+    <p>Name: {{ history.user.get_full_name}}</p> <br>
+    {% for item in pizza_list %}
+        {% for i in item %}
+            {{ i }} <br>
+        {% endfor %} <br>
+    {% endfor %} <br>
+    <p>Total Price: {{ total_cart_price }}$</p>
+    <p>Address: {{ history.user.address }}</p>
+    <p>Date: {{ history.created_at }}</p>
+    <form action="{% url "pp:index" %}">
+        <input type="submit" class="btn btn-dark" value="Continue" value="Continue">
+    </form> <br>
+{% endblock %}

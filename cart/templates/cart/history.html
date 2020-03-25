@@ -1,0 +1,34 @@
+{% extends 'pp/base.html' %}
+{% load static %}
+
+{% block title %}
+    History - {{ block.super }}
+{% endblock %}
+
+{% block body %}
+    {% if member_list %}
+        {% for item in member_list %}
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle history" type="button" id="dropdownMenu2"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ item.created_at }}
+                </button>
+                <div class="dropdown-menu dropdown-menu-right history" aria-labelledby="dropdownMenu2">
+                    {% for row in item.pizza_list %}
+                        {% for part in row %}
+                            {{ part }} <br>
+                        {% endfor %} <br>
+                    {% endfor %}
+                    Total Price: {{ item.total_cart_price }}$ <br>
+                    Address: {{ item.address }}
+                </div>
+            </div> <br>
+        {% endfor %}
+    {% else %}
+        You purchase History is Empty.
+    {% endif %}
+    <form action="{% url "pp:index" %}">
+        <input type="submit" class="btn btn-dark" value="Continue">
+    </form> <br>
+{% endblock %}
+

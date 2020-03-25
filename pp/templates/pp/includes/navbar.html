@@ -1,0 +1,58 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'pp:index' %}">Pizza</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            {% if user.is_staff %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'pp:create_pizza' %}">Create<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'admin:index' %}">Admin<span class="sr-only">(current)</span></a>
+                </li>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'cart:order' %}" id="his">History<span class="sr-only">(current)</span></a>
+                </li>
+                <div style="width: 100px;">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'cart:view_cart' %}">Cart {% if cart_len %}({{ cart_len }})
+                        {% endif %}<span class="sr-only">(current)</span></a>
+                    </li>
+                </div>
+            {% endif %}
+        </ul>
+        <form class="form-inline my-2 my-lg-0 search-field" method="get">
+            <input name="search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                   value="{{ request.GET.search }}">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        {% if not user.is_authenticated %}
+            <div>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="button" data-toggle="modal"
+                        data-target="#loginModal" name="login">Login
+                </button>
+                {% include 'accounts/includes/modal.html' with type='login' %}
+                <button class="btn btn-outline-warning my-2 my-sm-0" type="button" data-toggle="modal"
+                        data-target="#registerModal">Register
+                </button>
+                {% include 'accounts/includes/modal.html' with type='register' %}
+            </div>
+        {% else %}
+            <ul class="navbar-nav">
+                <li class="nav-item active user-info">
+                    {{ user.first_name }}
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" action="{% url 'accounts:logout' %}" method="post">
+                {% csrf_token %}
+                <button name="logout" class="btn btn-outline-danger my-2 my-sm-0" type="submit">Logout</button>
+            </form>
+        {% endif %}
+    </div>
+</nav>
